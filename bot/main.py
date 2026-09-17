@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from telegram import (
     Update,
     InlineKeyboardButton,
-    InlineKeyboardMarkup,
+١    InlineKeyboardMarkup,
 )
 from telegram.ext import (
     Application,
@@ -99,4 +99,8 @@ def main():
 
     app.run_polling()
 
-    print("F - Bot stopped", flush=True)
+        print("F - Bot stopped", flush=True)
+
+
+if __name__ == "__main__":
+    main()
