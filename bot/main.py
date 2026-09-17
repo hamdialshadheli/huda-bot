@@ -1,10 +1,15 @@
 import os
 
 from dotenv import load_dotenv
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import (
+    Update,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+)
 from telegram.ext import (
     Application,
     CommandHandler,
+    CallbackQueryHandler,
     ContextTypes,
 )
 
@@ -16,12 +21,24 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [
-            InlineKeyboardButton("📖 القرآن والثقافة", callback_data="quran"),
-            InlineKeyboardButton("📚 الملازم", callback_data="malzam"),
+            InlineKeyboardButton(
+                "📖 القرآن والثقافة",
+                callback_data="quran"
+            ),
+            InlineKeyboardButton(
+                "📚 الملازم",
+                callback_data="malzam"
+            ),
         ],
         [
-            InlineKeyboardButton("🎧 المحاضرات", callback_data="lectures"),
-            InlineKeyboardButton("ℹ️ عن البوت", callback_data="about"),
+            InlineKeyboardButton(
+                "🎧 المحاضرات",
+                callback_data="lectures"
+            ),
+            InlineKeyboardButton(
+                "ℹ️ عن البوت",
+                callback_data="about"
+            ),
         ],
     ]
 
@@ -33,6 +50,35 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=reply_markup,
     )
 
+
+async def button_handler(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE
+):
+    query = update.callback_query
+    await query.answer()
+
+    if query.data == "quran":
+        text = "📖 قسم القرآن والثقافة\n\nسيتم إضافة المحتوى هنا."
+
+    elif query.data == "malzam":
+        text = "📚 قسم الملازم\n\nسيتم إضافة الملازم هنا."
+
+    elif query.data == "lectures":
+        text = "🎧 قسم المحاضرات\n\nسيتم إضافة المحاضرات هنا."
+
+    elif query.data == "about":
+        text = (
+            "ℹ️ عن بوت هدى للناس\n\n"
+            "منصة ثقافية قيد التطوير."
+        )
+
+    else:
+        text = "❌ خيار غير معروف."
+
+    await query.edit_message_text(text=text)
+
+
 def main():
     if not BOT_TOKEN:
         raise ValueError("BOT_TOKEN غير موجود")
@@ -40,6 +86,7 @@ def main():
     app = Application.builder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(CallbackQueryHandler(button_handler))
 
     print("Bot is running...")
     app.run_polling()
