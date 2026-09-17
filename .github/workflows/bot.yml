@@ -24,7 +24,11 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run bot
-        env:
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-        run: |
-          python bot/main.py
+  env:
+    BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+  run: |
+    echo "TEST 1 - Python command starting"
+    python --version
+    echo "TEST 2 - Starting main.py"
+    python -u bot/main.py
+    echo "TEST 3 - main.py finished"
