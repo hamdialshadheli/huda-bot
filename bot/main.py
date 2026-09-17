@@ -1,3 +1,4 @@
+print("A - Python started", flush=True)
 import os
 
 from dotenv import load_dotenv
@@ -80,19 +81,22 @@ async def button_handler(
 
 
 def main():
+    print("B - Entered main", flush=True)
+
     if not BOT_TOKEN:
         raise ValueError("BOT_TOKEN غير موجود")
 
+    print("C - Token found", flush=True)
+
     app = Application.builder().token(BOT_TOKEN).build()
+
+    print("D - Application created", flush=True)
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(button_handler))
 
-    print("1 - Starting bot...", flush=True)
+    print("E - Starting polling", flush=True)
 
-app.run_polling()
+    app.run_polling()
 
-print("2 - Bot stopped.", flush=True)
-
-if __name__ == "__main__":
-    main()
+    print("F - Bot stopped", flush=True)
